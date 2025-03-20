@@ -26,10 +26,8 @@ jobs:
       - name: Run linting
         run: npm run lint
 
-      - name: Run tests
-        run: npm run test
+      - name: Install XVFB (for headless VS Code testing)
+        run: sudo apt-get install -y xvfb
 
-      # Ensure status check runs successfully
-      - name: Notify success
-        if: success()
-        run: echo "CI Passed!"
+      - name: Run Tests with XVFB
+        run: xvfb-run -a npm test
