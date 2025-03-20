@@ -8,29 +8,36 @@ We welcome contributions from the community and appreciate your help in making t
 ## 🚀 How to Contribute
 
 ### 1️⃣ Fork the Repository
+
 1. Go to the **[GitHub Repository](https://github.com/alastairrmcneill/GitShout)**.
 2. Click the **"Fork"** button in the top-right corner.
 3. This will create a copy of the repository under your GitHub account.
 
 ### 2️⃣ Clone Your Fork
+
 ```sh
 git clone https://github.com/alastairrmcneill/GitShout.git
 cd GitShout
 ```
 
 ### 3️⃣ Install Dependencies
+
 Make sure you have **Node.js** installed. Then run:
+
 ```sh
 npm install
 ```
 
 ### 4️⃣ Create a New Branch
+
 Before making any changes, create a new branch:
+
 ```sh
 git checkout -b feature/your-feature-name
 ```
 
 ### 5️⃣ Make Your Changes
+
 - Modify the **VS Code extension source code** inside `src/`.
 - Ensure your changes follow best practices.
 - Run **tests** before submitting:
@@ -43,14 +50,68 @@ git checkout -b feature/your-feature-name
   ```
 
 ### 6️⃣ Commit Your Changes
+
 Follow the **Conventional Commits** style:
+
 ```sh
 git add .
 git commit -m "feat: add new feature description"
 git push origin feature/your-feature-name
 ```
 
+#### **1️⃣ Patch Release (`0.0.X`)**
+
+🔹 For **bug fixes** and small changes  
+Example commit:
+
+```
+fix: resolve crash on startup
+```
+
+🔹 Results in:
+
+```
+1.2.3 → 1.2.4
+```
+
+#### **2️⃣ Minor Release (`0.X.0`)**
+
+🔹 For **new features (backward-compatible)**  
+Example commit:
+
+```
+feat: add dark mode support
+```
+
+🔹 Results in:
+
+```
+1.2.3 → 1.3.0
+```
+
+#### **3️⃣ Major Release (`X.0.0`)**
+
+🔹 For **breaking changes (not backward-compatible)**  
+Example commit:
+
+```
+feat!: update API to v2.0
+```
+
+or
+
+```
+BREAKING CHANGE: removed support for legacy functions
+```
+
+🔹 Results in:
+
+```
+1.2.3 → 2.0.0
+```
+
 ### 7️⃣ Create a Pull Request (PR)
+
 1. Go to your **GitHub Fork**.
 2. Click the **"New Pull Request"** button.
 3. Select your branch and compare it with `main` of the original repository.
@@ -60,6 +121,7 @@ git push origin feature/your-feature-name
 ---
 
 ## 🔥 Code Guidelines
+
 - Follow the **[VS Code Extension API](https://code.visualstudio.com/api)**.
 - Ensure your code is **clean, modular, and well-documented**.
 - Follow the **ESLint rules** (`npm run lint`).
@@ -68,6 +130,7 @@ git push origin feature/your-feature-name
 ---
 
 ## 🛠 Running & Debugging the Extension
+
 1. Open the project in **VS Code**.
 2. Press `F5` to start the **Extension Host** in a new window.
 3. Test the extension features interactively.
@@ -75,6 +138,7 @@ git push origin feature/your-feature-name
 ---
 
 ## ✅ Getting Your PR Merged
+
 - A project maintainer will review your PR.
 - Address any requested changes.
 - Once approved, your PR will be merged!
@@ -82,11 +146,13 @@ git push origin feature/your-feature-name
 ---
 
 ## 🤝 Code of Conduct
+
 By participating, you agree to follow our **[Code of Conduct](CODE_OF_CONDUCT.md)**.
 
 ---
 
 ### 🎉 Thank You for Contributing! 🚀
+
 If you have any questions, feel free to open a **[GitHub Issue](https://github.com/alastairrmcneill/GitShout/issues)**.
 
 Happy coding! 💻✨
