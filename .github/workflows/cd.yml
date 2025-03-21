@@ -5,8 +5,12 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
-  release:
+  lint_and_test:
+    name: Lint and Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,8 +24,32 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Semantic Release
-        run: npm install --save-dev semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/npm
+      - name: Run linting
+        run: npm run lint
+
+      - name: Install XVFB (for headless VS Code testing)
+        run: sudo apt-get install -y xvfb
+
+      - name: Run Tests with XVFB
+        run: xvfb-run -a npm test
+
+  build_and_publish:
+    name: Build and Publish
+    needs: lint_and_test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Run Semantic Release
         env:
