@@ -49,3 +49,12 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: vsce publish -p $VSCE_PAT
+
+      - name: Output Marketplace URL
+        run: |
+          EXTENSION_ID=$(jq -r .name package.json)
+          PUBLISHER=$(jq -r .publisher package.json)
+          MARKETPLACE_URL="https://marketplace.visualstudio.com/items?itemName=${PUBLISHER}.${EXTENSION_ID}"
+
+          echo "🔗 Extension published! View it on the Marketplace:"
+          echo "$MARKETPLACE_URL"

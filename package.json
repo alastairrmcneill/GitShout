@@ -2,7 +2,7 @@
   "name": "gitshout",
   "displayName": "GitShout",
   "description": "Accidentally worked on Main again? Even though you promised yourself you wouldn't? GitShout will help you remember.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.75.0"
   },
