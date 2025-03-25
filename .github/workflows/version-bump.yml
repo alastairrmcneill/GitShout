@@ -1,0 +1,59 @@
+name: Suggest Version Bump PR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  version-suggest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check if last commit was already a version bump
+        id: check_bump
+        run: |
+          git log -1 --pretty=%B | grep -q "chore(release):" && echo "skip=true" >> $GITHUB_OUTPUT || echo "skip=false" >> $GITHUB_OUTPUT
+
+      - name: Exit if version bump already happened
+        if: steps.check_bump.outputs.skip == 'true'
+        run: echo "Version bump already exists. Skipping."
+
+      - name: Generate version bump and changelog (dry run)
+        run: npm run release
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b suggest/version-bump-${{ github.run_number }}
+          git add package.json CHANGELOG.md
+          git commit -m "chore(release): suggested version bump [skip ci]"
+          git push origin suggest/version-bump-${{ github.run_number }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: suggest/version-bump-${{ github.run_number }}
+          title: "chore(release): suggested version bump"
+          body: |
+            This PR contains an automatically generated version bump and changelog
+            based on recent Conventional Commits.
+
+            If this PR is merged, the extension will be released to the VS Code Marketplace.
+
+            If a release is not needed, you can close or ignore this PR.
