@@ -2,7 +2,7 @@
   "name": "gitshout",
   "displayName": "GitShout",
   "description": "Accidentally worked on Main again? Even though you promised yourself you wouldn't? GitShout will help you remember.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -61,5 +61,8 @@
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.21.0",
     "typescript": "^4.9.5"
-  }
+  },
+  "extensionDependencies": [
+    "vscode.git"
+  ]
 }
