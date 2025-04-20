@@ -4,6 +4,7 @@ import { API as GitAPI, GitExtension, Repository } from './typings/git';
 let timeout: NodeJS.Timeout | undefined;
 let branchesToCheck: string[] = [];
 let hasWarnedDuringTyping = false;
+let enabled = true;
 
 export async function activate(context: vscode.ExtensionContext) {
   const gitExtension = vscode.extensions.getExtension<GitExtension>("vscode.git")?.exports;
@@ -55,16 +56,19 @@ function handleChange(repo: Repository) {
 }
 
 function checkAndWarnBranch(repo: Repository) {
-  console.log("Checking branch...");
   const isWarningBranch = branchesToCheck.includes(repo.state.HEAD?.name?.toLowerCase() ?? '');
 
-  if (isWarningBranch) {
+  if (isWarningBranch && enabled) {
     vscode.window.showWarningMessage(
       `You're editing ${repo.state.HEAD?.name} branch!`,
-      "Checkout to another branch"
+      "Checkout to another branch",
+      "Don't remind me again"
     ).then((selection) => {
       if (selection === "Checkout to another branch") {
         vscode.commands.executeCommand("git.checkout");
+      }
+      if (selection === "Don't remind me again") {
+        enabled = false;
       }
     });
   }
