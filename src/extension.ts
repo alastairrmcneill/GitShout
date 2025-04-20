@@ -60,7 +60,14 @@ function checkAndWarnBranch(repo: any) {
   const isWarningBranch = branchesToCheck.includes(repo.state.HEAD?.name.toLowerCase());
 
   if (isWarningBranch) {
-    vscode.window.showWarningMessage(`You're editing ${repo.state.HEAD?.name} branch!`);
+    vscode.window.showWarningMessage(
+      `You're editing ${repo.state.HEAD?.name} branch!`,
+      "Checkout to another branch"
+    ).then((selection) => {
+      if (selection === "Checkout to another branch") {
+        vscode.commands.executeCommand("git.checkout");
+      }
+    });
   }
 }
 
