@@ -36,25 +36,31 @@ export async function activate(context: vscode.ExtensionContext) {
 
   // User typed something - Check if in main
   vscode.workspace.onDidChangeTextDocument(() => {
-    if (!hasWarnedDuringTyping) {
-      checkAndWarnBranch(repo);
-      hasWarnedDuringTyping = true;
-    }
-
-    // Reset warning state after 10 seconds of inactivity
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      hasWarnedDuringTyping = false;
-    }, 10000); // 10 second reset
+    handleChange(repo);
   });
 
   // User has unstaged changes - Check if in main
-  repo.state.onDidChange(async () => {
-    checkAndWarnBranch(repo);
+  repo.state.onDidChange(() => {
+    if (repo.state.workingTreeChanges.length > 0) {
+      handleChange(repo);
+    }
   });
 }
 
 export function deactivate() {}
+
+function handleChange(repo: any) {
+  if (!hasWarnedDuringTyping) {
+    checkAndWarnBranch(repo);
+    hasWarnedDuringTyping = true;
+  }
+
+  // Reset warning state after 10 seconds of inactivity
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    hasWarnedDuringTyping = false;
+  }, 10000); // 10 second reset
+}
 
 function checkAndWarnBranch(repo: any) {
   const isWarningBranch = branchesToCheck.includes(repo.state.HEAD?.name.toLowerCase());
