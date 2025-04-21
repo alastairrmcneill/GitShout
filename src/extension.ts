@@ -17,6 +17,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
   if (gitApi.state !== 'initialized') {
     gitApi.onDidChangeState(() => {onGitAPIInitialised(gitApi);});
+  } else {
+    onGitAPIInitialised(gitApi);
   }
 }
 
