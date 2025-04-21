@@ -64,5 +64,5 @@ function checkAndWarnBranch(repo: Repository) {
 
 function updateBranchConfig() {
   const config = vscode.workspace.getConfiguration("gitshout");
-  branchesToCheck = config.get<string[]>("warningBranches", ["main", "master"]);
+  branchesToCheck = config.get<string[]>("warningBranches", ["main", "master"]).map(branch => branch.toLowerCase());
 }
