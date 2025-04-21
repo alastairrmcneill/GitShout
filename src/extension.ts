@@ -1,28 +1,20 @@
 import * as vscode from "vscode";
+import { API as GitAPI, GitExtension, Repository } from './typings/git'; 
 
 let timeout: NodeJS.Timeout | undefined;
 let branchesToCheck: string[] = [];
 let hasWarnedDuringTyping = false;
 
 export async function activate(context: vscode.ExtensionContext) {
-  const gitExtension = vscode.extensions.getExtension("vscode.git");
+  const gitExtension = vscode.extensions.getExtension<GitExtension>("vscode.git")?.exports;
 
   if (!gitExtension) {
     return;
   }
 
-  if (!gitExtension.isActive) {
-    await gitExtension.activate();
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 sec
-  }
+  const gitApi: GitAPI = gitExtension.getAPI(1);
 
-  const gitApi = gitExtension.exports.getAPI(1);
-
-  if (!gitApi) {
-    return;
-  }
-
-  const repo = gitApi.repositories[0];
+  const repo: Repository = gitApi.repositories[0];
 
   // Load initial configuration
   updateBranchConfig();
@@ -49,7 +41,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {}
 
-function handleChange(repo: any) {
+function handleChange(repo: Repository) {
   if (!hasWarnedDuringTyping) {
     checkAndWarnBranch(repo);
     hasWarnedDuringTyping = true;
@@ -62,8 +54,8 @@ function handleChange(repo: any) {
   }, 10000); // 10 second reset
 }
 
-function checkAndWarnBranch(repo: any) {
-  const isWarningBranch = branchesToCheck.includes(repo.state.HEAD?.name.toLowerCase());
+function checkAndWarnBranch(repo: Repository) {
+  const isWarningBranch = branchesToCheck.includes(repo.state.HEAD?.name?.toLowerCase() ?? '');
 
   if (isWarningBranch) {
     vscode.window.showWarningMessage(`You're editing ${repo.state.HEAD?.name} branch!`);
