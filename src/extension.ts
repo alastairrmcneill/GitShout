@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { API as GitAPI, GitExtension, Repository } from './typings/git'; 
+import { on } from "events";
 
 let timeout: NodeJS.Timeout | undefined;
 let branchesToCheck: string[] = [];
@@ -14,6 +15,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const gitApi: GitAPI = gitExtension.getAPI(1);
 
+  if (gitApi.state !== 'initialized') {
+    gitApi.onDidChangeState(() => {onGitAPIInitialised(gitApi);});
+  }
+}
+
+export function deactivate() {}
+
+function onGitAPIInitialised(gitApi: GitAPI) {
   const repo: Repository = gitApi.repositories[0];
 
   // Load initial configuration
@@ -38,8 +47,6 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   });
 }
-
-export function deactivate() {}
 
 function handleChange(repo: Repository) {
   if (!hasWarnedDuringTyping) {
